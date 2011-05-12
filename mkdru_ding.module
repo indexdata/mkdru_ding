@@ -1,0 +1,77 @@
+<?php
+/**
+ * Implements hook_search_tab()
+ */
+function mkdru_ding_ting_search_tab($keys) {
+  // Javascript from base mkdru
+  theme('mkdru_js', array('mkdru' => array(
+    'settings' => json_encode(variable_get('mkdru_ding', NULL)),
+    'query' => $keys
+  )));
+
+  // Ding integration
+  $path = drupal_get_path('module', 'mkdru_ding');
+  drupal_add_js($path . '/recipe.js', 'module', 'footer', TRUE, TRUE, FALSE);
+  drupal_add_js($path . '/mkdru.theme.js', 'module', 'footer', TRUE, TRUE, FALSE);
+  drupal_add_js($path . '/mkdru_ding.js', 'module', 'footer', TRUE, TRUE, FALSE);
+  drupal_add_js(array('mkdru_ding' => array(
+    'facetContainerSelector' => '#mkdru-raw-facet-container'
+  )), 'setting');
+
+  $html = theme('mkdru_results');
+  return array("content" => $html, "title" => "Meta Search");
+}
+
+/**
+* Implements hook_menu()
+*/
+function mkdru_ding_menu() {
+  $items['admin/settings/mkdru_ding'] = array(
+    'title' => 'Pazpar2 Metasearch Ding Integration',
+    'description' => 'Search settings for mkdru instance integrated into Ding.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mkdru_ding_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+* Implements hook_init()
+*/
+function mkdru_ding_init() {
+  // Applies our module specific CSS to all pages. This works best because
+  // all CSS is aggregated and cached so we reduce the number of HTTP 
+  // requests and the size is negligible.
+  drupal_add_css(drupal_get_path('module', 'mkdru_ding') .'/mkdru.css');
+
+}
+
+// Ding config
+function mkdru_ding_settings(&$form_state) {
+  $form_state['build_info']['args']['settings'] = variable_get('mkdru_ding', NULL);
+  $form = drupal_retrieve_form('mkdru_settings_form', &$form_state);
+  $form['settings']['#title'] = t('Search settings for DING integration');
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save configuration',
+  );
+  return $form;
+}
+function mkdru_ding_settings_submit($form, &$form_state) {
+  variable_set('mkdru_ding', $form_state['values']['settings']);
+  drupal_set_message(t('The configuration options have been saved.'));
+}
+
+/**
+* Implements hook_theme().
+*/
+function mkdru_ding_theme() {
+  return array(
+    'mkdru_results' => array(
+      'template' => 'mkdru-results',
+      'arguments' => array(),
+    ),
+  );
+}
