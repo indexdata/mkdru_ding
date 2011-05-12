@@ -1,0 +1,5 @@
+name = Pazpar2 metasearch Ding integration
+description = Pazpar2 metasearch for the DING T!NG ILS.
+core = 7.x
+dependencies[] = mkdru
+configure = admin/config/search/mkdru_ding

@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * Implements hook_search_info()
+ */
+function mkdru_ding_search_info() {
+  return array(
+    'title'               => 'Meta search',
+    'path'                => 'meta',
+    'conditions_callback' => 'mkdru_ding_search_conditions_callback',
+  );
+}
+
+/**
+ * Implements hook_search_page()
+ */
+function mkdru_ding_search_page($results) {
+  $output['prefix']['#markup'] = theme('mkdru_results');
+  $output['suffix']['#markup'] = '';
+  return $output;
+}
+
+/**
+ * Implements hook_ding_facetbrowser()
+ */
+function mkdru_ding_facetbrowser() {
+  $results             = new stdClass();
+  $results->facets     = array();
+  $results->show_empty = TRUE; # Show an empty facetbrowser block, even if search didn't return any results
+  return $results;
+}
+
+/**
+ * Search callback function that is invoked by search_view()
+ */
+function mkdru_ding_search_conditions_callback($keys) {}
+
+/**
+ * Implement hook_search_execute()
+ */
+function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
+  // Javascript from base mkdru  
+  theme('mkdru_js', array('setting' => array('mkdru' => array(
+    'settings' => json_encode(variable_get('mkdru_ding', NULL)),
+    'query' => $keys))));
+
+  // Ding integration
+  $path = drupal_get_path('module', 'mkdru_ding');
+  drupal_add_js($path . '/mkdru_ding.js', array(
+    'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
+  return array();
+}
+
+/**
+* Implements hook_menu()
+*/
+function mkdru_ding_menu() {
+  $items['admin/config/search/mkdru_ding'] = array(
+    'title' => 'Pazpar2 Metasearch Ding Integration',
+    'description' => 'Search settings for mkdru instance integrated into Ding.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mkdru_ding_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+// Ding config
+function mkdru_ding_settings($form, &$form_state) {
+  $form_state['build_info']['args']['settings'] = variable_get('mkdru_ding', NULL);
+  $form = drupal_retrieve_form('mkdru_settings_form', $form_state);
+  $form['settings']['#title'] = t('Search settings for DING integration');
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save configuration',
+  );
+  return $form;
+}
+
+function mkdru_ding_settings_submit($form, &$form_state) {
+  variable_set('mkdru_ding', $form_state['values']['settings']);
+  drupal_set_message(t('The configuration options have been saved.'));
+}
