@@ -23,7 +23,7 @@ function mkdru_ding_search_page($results) {
 /**
  * Implements hook_ding_facetbrowser()
  */
-function mkdru_ding_facetbrowser() {
+function mkdru_ding_ding_facetbrowser() {
   $results             = new stdClass();
   $results->facets     = array();
   $results->show_empty = TRUE; # Show an empty facetbrowser block, even if search didn't return any results
