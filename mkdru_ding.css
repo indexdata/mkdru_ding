@@ -1,0 +1,33 @@
+a.cross:hover {
+  text-decoration: line-through;
+}
+
+.mkdru-result-description {
+  font-size: 0.8em;
+}
+
+.mkdru-pager-container {
+  text-align: center;
+  background-color: #F6F6F2;
+  border-color: #F9F9F9;
+  padding: 3px 5px 3px 5px;
+}
+
+.mkdru-pager-inner-container {
+  border-top: 1px solid #D6D6D6;
+  border-bottom: 1px solid #D6D6D6;
+  padding: 5px 0px 5px 0px;
+}
+
+.mkdru-status-container {
+  background-color: #F6F6F2;
+  border-color: #F9F9F9;
+  padding: 3px 5px 3px 5px;
+}
+
+.mkdru-status-inner-container {
+  border-top: 1px solid #D6D6D6;
+  border-bottom: 1px solid #D6D6D6;
+  padding: 5px 0px 5px 0px;
+}
+

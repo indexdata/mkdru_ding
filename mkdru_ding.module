@@ -21,22 +21,12 @@ function mkdru_ding_search_page($results) {
 }
 
 /**
- * Implements hook_ding_facetbrowser()
- */
-function mkdru_ding_ding_facetbrowser() {
-  $results             = new stdClass();
-  $results->facets     = array();
-  $results->show_empty = TRUE; # Show an empty facetbrowser block, even if search didn't return any results
-  return $results;
-}
-
-/**
  * Search callback function that is invoked by search_view()
  */
 function mkdru_ding_search_conditions_callback($keys) {}
 
 /**
- * Implement hook_search_execute()
+ * Implements hook_search_execute()
  */
 function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
   // Javascript from base mkdru  
@@ -46,9 +36,25 @@ function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
 
   // Ding integration
   $path = drupal_get_path('module', 'mkdru_ding');
+  drupal_add_js($path . '/recipe.js', array(
+    'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
+  drupal_add_js($path . '/mkdru.theme.js', array(
+    'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
   drupal_add_js($path . '/mkdru_ding.js', array(
     'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
+  drupal_add_js(array('mkdru_ding' => array('facetContainerSelector' => 
+    '#block-ding-facetbrowser-facetbrowser')), 'setting');
   return array();
+}
+
+/**
+ * Implements hook_ding_facetbrowser()
+ */
+function mkdru_ding_ding_facetbrowser() {
+  $results             = new stdClass();
+  $results->facets     = array();
+  $results->show_empty = TRUE; # Show an empty facetbrowser block, even if search didn't return any results
+  return $results;
 }
 
 /**
@@ -66,7 +72,20 @@ function mkdru_ding_menu() {
   return $items;
 }
 
-// Ding config
+/**
+* Implements hook_init()
+*/
+function mkdru_ding_init() {
+  // Applies our module specific CSS to all pages. This works best because
+  // all CSS is aggregated and cached so we reduce the number of HTTP 
+  // requests and the size is negligible.
+  drupal_add_css(drupal_get_path('module', 'mkdru_ding') .'/mkdru_ding.css');
+}
+
+
+/**
+ * Settings form
+ */
 function mkdru_ding_settings($form, &$form_state) {
   $form_state['build_info']['args']['settings'] = variable_get('mkdru_ding', NULL);
   $form = drupal_retrieve_form('mkdru_settings_form', $form_state);
@@ -78,7 +97,22 @@ function mkdru_ding_settings($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Settings form handler
+ */
 function mkdru_ding_settings_submit($form, &$form_state) {
   variable_set('mkdru_ding', $form_state['values']['settings']);
   drupal_set_message(t('The configuration options have been saved.'));
+}
+
+/**
+* Implements hook_theme().
+*/
+function mkdru_ding_theme() {
+  return array(
+    'mkdru_results' => array(
+      'template' => 'mkdru-results',
+      'arguments' => array(),
+    ),
+  );
 }
