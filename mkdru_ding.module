@@ -11,9 +11,9 @@ function mkdru_ding_ting_search_tab($keys) {
 
   // Ding integration
   $path = drupal_get_path('module', 'mkdru_ding');
-  drupal_add_js($path . '/recipe.js', 'module', 'footer', TRUE, TRUE, FALSE);
-  drupal_add_js($path . '/mkdru.theme.js', 'module', 'footer', TRUE, TRUE, FALSE);
-  drupal_add_js($path . '/mkdru_ding.js', 'module', 'footer', TRUE, TRUE, FALSE);
+  drupal_add_js($path . '/recipe.js', 'module', 'footer', FALSE, TRUE, FALSE);
+  drupal_add_js($path . '/mkdru.theme.js', 'module', 'footer', FALSE, TRUE, FALSE);
+  drupal_add_js($path . '/mkdru_ding.js', 'module', 'footer', FALSE, TRUE, FALSE);
   drupal_add_js(array('mkdru_ding' => array(
     'facetContainerSelector' => '#mkdru-raw-facet-container'
   )), 'setting');
