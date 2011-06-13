@@ -6,8 +6,7 @@ function mkdru_ding_ting_search_tab($keys) {
   // Javascript from base mkdru
   theme('mkdru_js', array('mkdru' => array(
     'settings' => json_encode(variable_get('mkdru_ding', NULL)),
-    'query' => $keys
-  )));
+    'state' => array('query' => $keys))));
 
   // Ding integration
   $path = drupal_get_path('module', 'mkdru_ding');
