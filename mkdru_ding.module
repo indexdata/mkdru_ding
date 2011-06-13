@@ -32,7 +32,7 @@ function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
   // Javascript from base mkdru  
   theme('mkdru_js', array('setting' => array('mkdru' => array(
     'settings' => json_encode(variable_get('mkdru_ding', NULL)),
-    'query' => $keys))));
+    'state' => array('query' => $keys)))));
 
   // Ding integration
   $path = drupal_get_path('module', 'mkdru_ding');
