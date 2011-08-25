@@ -27,8 +27,8 @@ Drupal.theme.prototype.mkdruFacetContainer = function (facetsCfg) {
 };
 
 mkdru_ding.populateFacetContainer = function () {
-  $(Drupal.settings.mkdru_ding.facetContainerSelector).html(Drupal.theme('mkdruFacetContainer', mkdru.facets));
-}
+  $(Drupal.settings.dingFacetBrowser.mainElement).html(Drupal.theme('mkdruFacetContainer', mkdru.facets));
+};
 
 // sometimes/browsers defer won't work and we need to have mkdru call us back
 if (mkdru.pz2) {

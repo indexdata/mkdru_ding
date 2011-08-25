@@ -42,8 +42,6 @@ function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
     'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
   drupal_add_js($path . '/mkdru_ding.js', array(
     'type' => 'file', 'scope' => 'footer', 'defer' => TRUE, 'preprocess' => FALSE));
-  drupal_add_js(array('mkdru_ding' => array('facetContainerSelector' => 
-    '#block-ding-facetbrowser-facetbrowser')), 'setting');
   return array();
 }
 
