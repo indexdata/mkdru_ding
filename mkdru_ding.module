@@ -21,6 +21,32 @@ function mkdru_ding_search_page($results) {
 }
 
 /**
+ * Implements hook_block_info()
+ */
+function mkdru_ding_block_info() {
+  $blocks['mkdru_ding_search_results'] = array(
+    'info' => t('mkdru ding search results container.'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function mkdru_ding_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'mkdru_ding_search_results':
+      $block['subject'] = t('mkdru ding search results');
+      $block['content'] = '<div class="mkdru-result-list"></div><div class="mkdru-pager"></div><div class="mkdru-counts"></div>';
+      break;
+  }
+  return $block;
+}
+/**
  * Search callback function that is invoked by search_view()
  */
 function mkdru_ding_search_conditions_callback($keys) {}
@@ -29,7 +55,7 @@ function mkdru_ding_search_conditions_callback($keys) {}
  * Implements hook_search_execute()
  */
 function mkdru_ding_search_execute($keys = NULL, $conditions = NULL) {
-  // Javascript from base mkdru  
+  // Javascript from base mkdru
   theme('mkdru_js', array('setting' => array('mkdru' => array(
     'settings' => json_encode(variable_get('mkdru_ding', NULL)),
     'state' => array('query' => $keys)))));
@@ -75,7 +101,7 @@ function mkdru_ding_menu() {
 */
 function mkdru_ding_init() {
   // Applies our module specific CSS to all pages. This works best because
-  // all CSS is aggregated and cached so we reduce the number of HTTP 
+  // all CSS is aggregated and cached so we reduce the number of HTTP
   // requests and the size is negligible.
   drupal_add_css(drupal_get_path('module', 'mkdru_ding') .'/mkdru_ding.css');
 }
