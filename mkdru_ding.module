@@ -21,6 +21,32 @@ function mkdru_ding_search_page($results) {
 }
 
 /**
+ * Implements hook_block_info()
+ */
+function mkdru_ding_block_info() {
+  $blocks['mkdru_ding_search_results'] = array(
+    'info' => t('mkdru ding search results container.'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function mkdru_ding_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'mkdru_ding_search_results':
+      $block['subject'] = t('mkdru ding search results');
+      $block['content'] = '<div class="mkdru-result-list"></div><div class="mkdru-pager"></div><div class="mkdru-counts"></div>';
+      break;
+  }
+  return $block;
+}
+/**
  * Search callback function that is invoked by search_view()
  */
 function mkdru_ding_search_conditions_callback($keys) {}
