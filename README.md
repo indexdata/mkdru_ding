@@ -6,11 +6,11 @@ and for ding1 the '6.x-1.x' one (what follows assumes you run againts ding2):
 
   - read-only
 
-    git clone --branch 7.x-1.x http://git.drupal.org/project/mkdru.git
+      git clone --branch 7.x-1.x http://git.drupal.org/project/mkdru.git
 
   - read-write
 
-    git clone --branch 7.x-1.x 'username'@git.drupal.org:project/mkdru.git
+      git clone --branch 7.x-1.x 'username'@git.drupal.org:project/mkdru.git
 
 More info: <http://drupal.org/project/mkdru/git-instructions>. Module tarballs 
 can be downloaded from the project page in case you don't want to use Git.
@@ -20,11 +20,11 @@ can be downloaded from the project page in case you don't want to use Git.
 
   - read-only
   
-    git clone --branch 7.x-1.x http://git://github.com/indexdata/mkdru_ding.git
+      git clone --branch 7.x-1.x http://git://github.com/indexdata/mkdru_ding.git
 
   - read-write
 
-    git clone --branch 7.x-1.x git@github.com:indexdata/mkdru_ding.git
+      git clone --branch 7.x-1.x git@github.com:indexdata/mkdru_ding.git
 
 
 3. Symlink both modules under your/drupal/sites/all/modules
@@ -48,15 +48,15 @@ using an Apache mod_proxy
   - edit your Drupal vhost config (usually under `/etc/apache2/site-available/`)
   with the following settings:
 
-    <Proxy *>
-      Order deny,allow
-      Allow from all
-    </Proxy>
+      <Proxy *>
+        Order deny,allow
+        Allow from all
+      </Proxy>
 
-    ProxyPass /service-proxy/ http://pz2.dbc.dk/service-proxy/
-    ProxyPassReverse /service-proxy/ http://pz2.dbc.dk/service-proxy/
-    
-    ProxyPreserveHost Off
+      ProxyPass /service-proxy/ http://pz2.dbc.dk/service-proxy/
+      ProxyPassReverse /service-proxy/ http://pz2.dbc.dk/service-proxy/
+      
+      ProxyPreserveHost Off
 
 
   - make sure that under `admin/config/search/mkdru_ding` settings the 
@@ -79,5 +79,5 @@ modules so you will need to fetch them on your own:
   systems, get the library from [here](http://mk2.indexdata.com/pazpar2/js/pz2.js) 
   and make available within your Apache vhost using the following directive:
 
-    Alias /pazpar2/js/pz2.js /path/to/pz2.js
+      Alias /pazpar2/js/pz2.js /path/to/pz2.js
 
