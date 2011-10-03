@@ -17,13 +17,31 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
          '</div>' +
          '<div class="right-column left">';
   if (hit["md-author"]) {
-    html += '<div class="creator"><span class="byline">By </span>' +
-       '<a class="author" href="/search/meta/'+hit['md-author']+'">' +
-       hit['md-author']+'</a>';
+    // expand on ; and reprint in the same form
+    var authors = hit["md-author"][0].split(';');
+    html += '<div class="creator"><span class="byline">By </span>'
+    for(var i=0; i<authors.length-1; i++) {
+      html+='<a class="author" href="'+Drupal.settings.basePath+'search/meta/author/'+authors[i].trim()+'">'+authors[i]+'</a> ;';
+    }
+    html+='<a class="author" href="'+Drupal.settings.basePath+'search/meta/author/'+authors[authors.length-1].trim()+'">'+authors[authors.length-1]+'</a>';
     if (hit['md-date']) {
       html += '<span class="date"> ('+hit['md-date']+')</span>';
     }
     html += '</div><p></p>';
+  }
+  var dhit=hit['location'][0];
+  if (dhit["md-journal-subpart"]) {
+    html += '<div>'+Drupal.t("Full reference")+': '+dhit["md-journal-subpart"];
+    if (dhit["md-medium"]) { html += ', '+Drupal.t("published as")+': '+dhit["md-medium"]; }
+    html += '</div><p/>';
+  }
+  if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
+    html+='<div>';
+    html+=Drupal.formatPlural(dhit["md-subject"].length,"Subject","Subjects")+': <ul>';
+    for(i=0; i<dhit["md-subject"].length; i++) {
+       html+='<a href="'+Drupal.settings.basePath+'search/meta/subject/'+dhit["md-subject"][i]+'"><li style="display:inline; padding-right:0.5em" >'+dhit["md-subject"][i]+'</li></a>';
+    }
+    html+='</ul></div>';
   }
   html += "</div>";
   if (hit["md-description"]) {
