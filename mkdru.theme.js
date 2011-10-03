@@ -1,3 +1,16 @@
+Drupal.theme.mkdruShowFullDescr = function(id) {
+  document.getElementById("short_"+id).style.display = 'none';
+  document.getElementById("full_"+id).style.display = 'block';
+}
+Drupal.theme.mkdruShowShortDescr = function(id) {
+  document.getElementById("short_"+id).style.display = 'block';
+  document.getElementById("full_"+id).style.display = 'none';
+}
+Drupal.theme.mkdruTruncateDescr = function(desc,length) {
+  var s=desc.substr(0,length);
+  return s.substr(0,s.lastIndexOf(' ')); 
+}
+
 Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   var link = choose_url(hit);
   if (!link) link = choose_url(hit['location'][0]);
@@ -45,8 +58,18 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   }
   html += "</div>";
   if (hit["md-description"]) {
-    // limit description to 400 characters
-    html += hit["md-description"][0].substr(0, 400);
+    // limit description to 600 characters
+    var d=hit["md-description"][0];
+    var recid=hit.recid;
+    if (d.length < 601) {
+      html+='<div>'+d+'</div>';
+    } else {
+      html += '<div id="full_' +recid+'" style="display:none">'+
+              d +'<a href="javascript:Drupal.theme.mkdruShowShortDescr(\''+recid+'\')"> <i>less</i></a></div>';
+      html += '<div id="short_'+recid+'" style="display:block">'+
+              Drupal.theme.mkdruTruncateDescr(d,600)
+                +'<a href="javascript:Drupal.theme.mkdruShowFullDescr(\''+recid+'\')"> <i>more</i></a></div>';
+    }
   }
   html += '</div>';
   html += '</div>';
