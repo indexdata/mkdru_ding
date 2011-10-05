@@ -1,5 +1,28 @@
+Drupal.theme.mkdruShowFullDescr = function(id) {
+  document.getElementById("short_"+id).style.display = 'none';
+  document.getElementById("full_"+id).style.display = 'block';
+}
+Drupal.theme.mkdruShowShortDescr = function(id) {
+  document.getElementById("short_"+id).style.display = 'block';
+  document.getElementById("full_"+id).style.display = 'none';
+}
+Drupal.theme.mkdruTruncateDescr = function(desc,length) {
+  var s=desc.substr(0,length);
+  return s.substr(0,s.lastIndexOf(' ')); 
+}
+Drupal.theme.mkdruSafeTrim = function(s) {
+  if(s.trim) return s.trim();
+  if(s.replace) return s.replace(/^\s+|\s+$/g,"");
+  // argh
+  if(console && console.log) console.log("String object doesn't even have replace() ??");
+  return s;
+}
+
 Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   var link = choose_url(hit);
+  var basePath=Drupal.settings.basePath;
+  var use_long_fields=0;
+
   if (!link) link = choose_url(hit['location'][0]);
   var html = "";
   html += '<li class="search-result" id="rec_' + hit.recid + '" >' +
@@ -7,6 +30,7 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   if (link) html += '<a href="'+link+'" target="_blank" >';
   html += hit["md-title"];
   if (link) html += '</a>';
+  if(hit['location'][0]['md-medium']) { html+=" ("+hit['location'][0]['md-medium']+")"; }
   html += '</h3>';
   html += '<div class="search-snippet-info">' +
       '<p class="search-snippet"></p>' +
@@ -17,18 +41,62 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
          '</div>' +
          '<div class="right-column left">';
   if (hit["md-author"]) {
-    html += '<div class="creator"><span class="byline">By </span>' +
-       '<a class="author" href="/search/meta/'+hit['md-author']+'">' +
-       hit['md-author']+'</a>';
+    // expand on ; and reprint in the same form
+    var authors = hit["md-author"][0].split(';');
+    html += '<div class="creator"><span class="byline">By </span>'
+    for(var i=0; i<authors.length-1; i++) {
+      if(use_long_fields) {
+        html+='<a class="author" href="'+basePath+'search/meta/lau='+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
+      } else {
+        html+='<a class="author" href="'+basePath+'search/meta/'+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
+      }
+    }
+    if(use_long_fields) {
+      html+='<a class="author" href="'+basePath+'search/meta/lau='+Drupal.theme.mkdruSafeTrim(authors[authors.length-1])+'">'+authors[authors.length-1]+'</a>';
+    } else {
+      html+='<a class="author" href="'+basePath+'search/meta/'+Drupal.theme.mkdruSafeTrim(authors[authors.length-1])+'">'+authors[authors.length-1]+'</a>';
+    }
     if (hit['md-date']) {
       html += '<span class="date"> ('+hit['md-date']+')</span>';
     }
     html += '</div><p></p>';
   }
+  var dhit=hit['location'][0];
+  if (dhit["md-journal-subpart"]) {
+    html += '<div class="mkdru-result-journal-subpart">'+dhit["md-journal-subpart"];
+    html += '</div><p/>';
+  }
+  if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
+    html+='<div class="mkdru-result-subject"><p>';
+    for(i=0; i<dhit["md-subject"].length-1; i++) {
+       if(use_long_fields) {
+         html+='<a href="'+basePath+'search/meta/lsu='+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
+       } else {
+         html+='<a href="'+basePath+'search/meta/'+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
+       }
+    }
+    if(use_long_fields) {
+      html+='<a href="'+basePath+'search/meta/lsu='+dhit["md-subject"][dhit["md-subject"].length-1]+'">'+dhit["md-subject"][dhit["md-subject"].length-1]+'</a></p></div>';
+    } else {
+      html+='<a href="'+basePath+'search/meta/'+dhit["md-subject"][dhit["md-subject"].length-1]+'">'+dhit["md-subject"][dhit["md-subject"].length-1]+'</a></p></div>';
+    }
+  }
   html += "</div>";
   if (hit["md-description"]) {
-    // limit description to 400 characters
-    html += hit["md-description"][0].substr(0, 400);
+    // limit description to 600 characters
+    var d=hit["md-description"][0];
+    var recid=hit.recid;
+    html+='<span class="mkdru-result-description">';
+    if (d.length < 620) {
+      html+='<div>'+d+'</div>';
+    } else {
+      html += '<div id="full_' +recid+'" style="display:none">'+
+              d +'<a href="javascript:Drupal.theme.mkdruShowShortDescr(\''+recid+'\')"> <i>less</i></a></div>';
+      html += '<div id="short_'+recid+'" style="display:block">'+
+              Drupal.theme.mkdruTruncateDescr(d,600)
+                +'<a href="javascript:Drupal.theme.mkdruShowFullDescr(\''+recid+'\')"> <i>more</i></a></div>';
+    }
+    html+='</span>';
   }
   html += '</div>';
   html += '</div>';
