@@ -1,22 +1,22 @@
 Drupal.theme.mkdruShowFullDescr = function(id) {
   document.getElementById("short_"+id).style.display = 'none';
   document.getElementById("full_"+id).style.display = 'block';
-}
+};
 Drupal.theme.mkdruShowShortDescr = function(id) {
   document.getElementById("short_"+id).style.display = 'block';
   document.getElementById("full_"+id).style.display = 'none';
-}
+};
 Drupal.theme.mkdruTruncateDescr = function(desc,length) {
   var s=desc.substr(0,length);
-  return s.substr(0,s.lastIndexOf(' ')); 
-}
+  return s.substr(0,s.lastIndexOf(' '));
+};
 Drupal.theme.mkdruSafeTrim = function(s) {
   if(s.trim) return s.trim();
   if(s.replace) return s.replace(/^\s+|\s+$/g,"");
   // argh
   if(console && console.log) console.log("String object doesn't even have replace() ??");
   return s;
-}
+};
 
 Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   var link = choose_url(hit);
@@ -43,7 +43,7 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   if (hit["md-author"]) {
     // expand on ; and reprint in the same form
     var authors = hit["md-author"][0].split(';');
-    html += '<div class="creator"><span class="byline">By </span>'
+    html += '<div class="creator"><span class="byline">' + Drupal.t('By') + ' </span>';
     for(var i=0; i<authors.length-1; i++) {
       if(use_long_fields) {
         html+='<a class="author" href="'+basePath+'search/meta/lau='+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
@@ -68,7 +68,7 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   }
   if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
     html+='<div class="mkdru-result-subject"><p>';
-    for(i=0; i<dhit["md-subject"].length-1; i++) {
+    for(var i=0; i<dhit["md-subject"].length-1; i++) {
        if(use_long_fields) {
          html+='<a href="'+basePath+'search/meta/lsu='+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
        } else {
@@ -93,8 +93,8 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
       html += '<div id="full_' +recid+'" style="display:none">'+
               d +'<a href="javascript:Drupal.theme.mkdruShowShortDescr(\''+recid+'\')"> <i>less</i></a></div>';
       html += '<div id="short_'+recid+'" style="display:block">'+
-              Drupal.theme.mkdruTruncateDescr(d,600)
-                +'<a href="javascript:Drupal.theme.mkdruShowFullDescr(\''+recid+'\')"> <i>more</i></a></div>';
+              Drupal.theme.mkdruTruncateDescr(d,600) +
+                '<a href="javascript:Drupal.theme.mkdruShowFullDescr(\''+recid+'\')"> <i>more</i></a></div>';
     }
     html+='</span>';
   }
@@ -141,7 +141,7 @@ Drupal.theme.mkdruFacet = function (terms, facet, max, selections) {
     html += '<div class="form-item form-type-checkbox">';
     html += '<input type="checkbox" id="'+id+'" onclick="window.location=\'' +term.toggleLink+'\'; return true;" class="form-checkbox"';
     if (term.selected) html += ' checked="checked"';
-    html += '/><label class="option" for="'+id+'">'+term.name; 
+    html += '/><label class="option" for="'+id+'">'+term.name;
     html += '<span> ('+term.freq+')</span></label></div>';
   }
   if (terms.length === 0 && selections && selections.length) {
