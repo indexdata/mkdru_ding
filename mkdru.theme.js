@@ -65,7 +65,10 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   if (dhit["md-journal-subpart"]) {
     html += '<div class="mkdru-result-journal-subpart">'+dhit["md-journal-subpart"];
     html += '</div><p/>';
-  }
+  } else if (hit["md-journal-title"]) {
+    html += '<div class="mkdru-result-journal">'+hit["md-journal-title"];
+    html += '</div><p/>';
+  };
   if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
     html+='<div class="mkdru-result-subject"><p>';
     for(var i=0; i<dhit["md-subject"].length-1; i++) {
