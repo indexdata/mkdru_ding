@@ -142,7 +142,7 @@ Drupal.theme.mkdruFacet = function (terms, facet, max, selections) {
     html += '<input type="checkbox" id="'+id+'" onclick="window.location=\'' +term.toggleLink+'\'; return true;" class="form-checkbox"';
     if (term.selected) html += ' checked="checked"';
     html += '/><label class="option" for="'+id+'">'+term.name;
-    html += '<span> ('+term.freq+')</span></label></div>';
+    html += '<span>&nbsp;('+term.freq+')</span></label></div>';
   }
   if (terms.length === 0 && selections && selections.length) {
     for (var i=0; i<selections.length; i++) {
@@ -155,7 +155,7 @@ Drupal.theme.mkdruFacet = function (terms, facet, max, selections) {
         html += '<input type="checkbox" checked="checked" id="'+name+'" ' +
           'onclick="window.location=\''+mkdru.removeLimit(facet, selections[i]) +
           '\';return true;" class="form-checkbox"/><label class="option" for="' +
-          name+'">'+name+'</a><span> (0)</span></label></div>';
+          name+'">'+name+'</a></label></div>';
       }
     }
   }
