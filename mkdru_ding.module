@@ -114,6 +114,22 @@ function mkdru_ding_settings($form, &$form_state) {
   $form_state['build_info']['args']['settings'] = variable_get('mkdru_ding', NULL);
   $form = drupal_retrieve_form('mkdru_settings_form', $form_state);
   $form['settings']['#title'] = t('Search settings for DING integration');
+  $settings=$form_state['build_info']['args']['settings'];
+  $form['settings']['specific_author_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search-attribute for author-links'),
+    '#description' => t('Use this specific attribute for author-links instead of any'),
+    '#required' => FALSE,
+    '#default_value' => $settings['specific_author_field'],
+  );
+  $form['settings']['specific_subject_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search-attribute for subject-links'),
+    '#description' => t('Use this specific attribute for subject-links instead of any'),
+    '#required' => FALSE,
+    '#default_value' => $settings['specific_subject_field'],
+  );
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Save configuration',

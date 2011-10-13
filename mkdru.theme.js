@@ -21,7 +21,12 @@ Drupal.theme.mkdruSafeTrim = function(s) {
 Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   var link = choose_url(hit);
   var basePath=Drupal.settings.basePath;
-  var use_long_fields=0;
+  var specific_author_field="";
+  var specific_subject_field="";
+  if(mkdru.settings) {
+    if(mkdru.settings.specific_author_field) specific_author_field=mkdru.settings.specific_author_field+'=';
+    if(mkdru.settings.specific_subject_field) specific_subject_field=mkdru.settings.specific_subject_field+'=';
+  }
 
   if (!link) link = choose_url(hit['location'][0]);
   var html = "";
@@ -45,17 +50,9 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
     var authors = hit["md-author"][0].split(';');
     html += '<div class="creator"><span class="byline">' + Drupal.t('By') + ' </span>';
     for(var i=0; i<authors.length-1; i++) {
-      if(use_long_fields) {
-        html+='<a class="author" href="'+basePath+'search/meta/lau='+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
-      } else {
-        html+='<a class="author" href="'+basePath+'search/meta/'+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
-      }
+      html+='<a class="author" href="'+basePath+'search/meta/'+specific_author_field+Drupal.theme.mkdruSafeTrim(authors[i])+'">'+authors[i]+'</a> ;';
     }
-    if(use_long_fields) {
-      html+='<a class="author" href="'+basePath+'search/meta/lau='+Drupal.theme.mkdruSafeTrim(authors[authors.length-1])+'">'+authors[authors.length-1]+'</a>';
-    } else {
-      html+='<a class="author" href="'+basePath+'search/meta/'+Drupal.theme.mkdruSafeTrim(authors[authors.length-1])+'">'+authors[authors.length-1]+'</a>';
-    }
+    html+='<a class="author" href="'+basePath+'search/meta/'+specific_author_field+Drupal.theme.mkdruSafeTrim(authors[authors.length-1])+'">'+authors[authors.length-1]+'</a>';
     if (hit['md-date']) {
       html += '<span class="date"> ('+hit['md-date']+')</span>';
     }
@@ -72,17 +69,9 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
     html+='<div class="mkdru-result-subject"><p>';
     for(var i=0; i<dhit["md-subject"].length-1; i++) {
-       if(use_long_fields) {
-         html+='<a href="'+basePath+'search/meta/lsu='+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
-       } else {
-         html+='<a href="'+basePath+'search/meta/'+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
-       }
+       html+='<a href="'+basePath+'search/meta/'+specific_subject_field+dhit["md-subject"][i]+'">'+dhit["md-subject"][i]+'</a> ; ';
     }
-    if(use_long_fields) {
-      html+='<a href="'+basePath+'search/meta/lsu='+dhit["md-subject"][dhit["md-subject"].length-1]+'">'+dhit["md-subject"][dhit["md-subject"].length-1]+'</a></p></div>';
-    } else {
-      html+='<a href="'+basePath+'search/meta/'+dhit["md-subject"][dhit["md-subject"].length-1]+'">'+dhit["md-subject"][dhit["md-subject"].length-1]+'</a></p></div>';
-    }
+    html+='<a href="'+basePath+'search/meta/'+specific_subject_field+dhit["md-subject"][dhit["md-subject"].length-1]+'">'+dhit["md-subject"][dhit["md-subject"].length-1]+'</a></p></div>';
   }
   html += "</div>";
   if (hit["md-description"]) {
