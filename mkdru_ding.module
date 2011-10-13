@@ -41,7 +41,7 @@ function mkdru_ding_block_view($delta = '') {
   switch ($delta) {
     case 'mkdru_ding_search_results':
       $block['subject'] = t('mkdru ding search results');
-      $block['content'] = '<div class="mkdru-result-list"></div><div class="mkdru-pager"></div><div class="mkdru-counts"></div>';
+      $block['content'] = '<div class="mkdru-pager"></div><div class="mkdru-counts"></div><p></p><div class="mkdru-result-list"></div><div class="mkdru-pager"></div><div class="mkdru-counts"></div>';
       break;
   }
   return $block;
