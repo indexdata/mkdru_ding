@@ -65,7 +65,7 @@ Drupal.theme.mkdruResult = function(hit, num, detailLink) {
   } else if (hit["md-journal-title"]) {
     html += '<div class="mkdru-result-journal">'+hit["md-journal-title"];
     html += '</div><p/>';
-  };
+  }
   if (dhit["md-subject"] && dhit["md-subject"].length > 0) {
     html+='<div class="mkdru-result-subject"><p>';
     for(var i=0; i<dhit["md-subject"].length-1; i++) {
@@ -133,7 +133,7 @@ Drupal.theme.mkdruFacet = function (terms, facet, max, selections) {
     html += '<div class="form-item form-type-checkbox">';
     html += '<input type="checkbox" id="'+id+'" onclick="window.location=\'' +term.toggleLink+'\'; return true;" class="form-checkbox"';
     if (term.selected) html += ' checked="checked"';
-    html += '/><label class="option" for="'+id+'">'+term.name;
+    html += '/><label class="option" for="'+id+'">' + term.name.replace('/', ' / ');
     html += '<span>&nbsp;('+term.freq+')</span></label></div>';
   }
   if (terms.length === 0 && selections && selections.length) {
@@ -147,7 +147,7 @@ Drupal.theme.mkdruFacet = function (terms, facet, max, selections) {
         html += '<input type="checkbox" checked="checked" id="'+name+'" ' +
           'onclick="window.location=\''+mkdru.removeLimit(facet, selections[i]) +
           '\';return true;" class="form-checkbox"/><label class="option" for="' +
-          name+'">'+name+'</a></label></div>';
+          name+'">' + name.replace('/', ' / ') + '</a></label></div>';
       }
     }
   }
