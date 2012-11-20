@@ -5,7 +5,7 @@
  */
 function mkdru_ding_search_info() {
   return array(
-    'title'               => 'Meta search',
+    'title'               => 't(Meta search)',
     'path'                => 'meta',
     'conditions_callback' => 'mkdru_ding_search_conditions_callback',
   );
